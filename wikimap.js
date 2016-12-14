@@ -1,0 +1,2 @@
+const WikiMap = new Graph();
+
