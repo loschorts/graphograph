@@ -1,34 +1,33 @@
-function fetchInfo (titles, prop, cb) {
-	const data = [];
-
-	function fetchBatch (titles, prop, cb, plcontinue) {
-		$.ajax({
-			url: urlFor(titles, prop),
-			data: {
-				action: "query",
-				titles,
-				prop,
-				plcontinue,
-				pllimit: 500,
-				format: "json"
-			},
-			dataType: "jsonp",
-			success: function(res){
-				data.push(res);
-				debugger
-				if (res.batchcomplete === "") {
-					cb(data);
-				} else {
-					fetchBatch(titles, prop, cb, res.continue.plcontinue)
-				}
-			}
+const parse = {
+	links: (data) => {
+		let result = {};
+		data.forEach( res => {
+			Object.keys(res.query.pages).forEach(id => {
+				res.query.pages[id].links.forEach( link => {
+					if (typeof result[id] === 'undefined') result[id] = new Set();
+					result[id].add(link.title);
+				})
+			})
 		})
+		return window.result = result;
 	}
-
-	fetchBatch(titles, prop, cb);
 }
 
-
-function urlFor(titles, prop) {
-	return `https://en.wikipedia.org/w/api.php`
+function fetchInfo (titles, prop, cb, data = [], plcontinue) {
+	$.ajax({
+		url: "https://en.wikipedia.org/w/api.php",
+		data: {
+			action: "query", titles, prop, plcontinue, pllimit: 500, format: "json"
+		},
+		dataType: "jsonp",
+		success: function(res){
+			data.push(res);
+			if (res.batchcomplete === "") {
+				cb(parse[prop](data));
+			} else {
+				fetchInfo(titles, prop, cb, data, res.continue.plcontinue)
+			}
+		}
+	})
 }
+
