@@ -10,11 +10,9 @@ class Node {
 
 	destroy() {
 		this.childEdges.forEach(edge => {
-			console.log(edge)
 			edge.destroy();
 		})
 		this.parentEdges.forEach(edge => {
-			console.log(edge)
 			edge.destroy();
 		})
 	}
@@ -38,8 +36,25 @@ class Edge {
 }
 
 class Graph {
-	constructor(nodes){
-		this.nodes = nodes;
+	constructor(){
+		this.nodes = {};
+		this.edges = {};
+		this.connect = this.connect.bind(this);
+	}
+
+	add(nodeVal){
+		this.nodes[nodeVal] = new Node(nodeVal);
+		return this.nodes;
+	}
+
+	getNode(nodeVal){
+		return this.nodes[nodeVal];
+	}
+
+	connect(a, b) {
+		this.nodes[a.value] = a;
+		this.nodes[b.value] = b;
+		this.edges[a,b] = new Edge(a, b);
 	}
 
 	*bfs(queue) {

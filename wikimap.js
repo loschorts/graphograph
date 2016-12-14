@@ -1,11 +1,16 @@
 class WikiMap extends Graph {
-	constructor(start) {
-		this.root = new Node(start);
-		this.root = root;
-		super([root]);
-	}
 
-	explore(node) {
-		
+	explore(page) {
+		const pageNode = this.getNode(page);
+		if (pageNode) {
+			fetchInfo(page, (links) => {
+				links.forEach(link => {
+					this.connect(pageNode, new Node(link));
+				});
+			});
+		} else {
+			this.add(page);
+			this.explore(page);
+		}
 	}
 }
