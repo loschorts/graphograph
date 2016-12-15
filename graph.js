@@ -49,8 +49,19 @@ class Graph {
 	}
 
 	addEdge(a, b) {
-		if (a.constructor !== Node || b.constructor !== Node) throw 'invalid nodes'
-		this.edges[a,b] = new Edge(a, b);
+		this.edges[[a,b]] = new Edge(a, b);
+	}
+
+	addNodeByVal(val){
+		return this.addNode(new Node(val));
+	}
+
+	getNode(val){
+		return this.nodes[val];
+	}
+
+	getEdgeByNodes(a,b) {
+		return this.edges[[a,b]]
 	}
 
 	connect(a, b) {
