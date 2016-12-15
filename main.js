@@ -27,5 +27,5 @@ function go() {
 }
 
 let x = new WikiMap();
-x.addPage("World War II");
+x.addPage("Life");
 let gen = x.expand()
