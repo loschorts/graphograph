@@ -1,9 +1,9 @@
 const parse = {
-	links: (data) => {
+	links: (batches) => {
 		let result = new Set();
-		data.forEach( res => {
-			Object.keys(res.query.pages).forEach(id => {
-				res.query.pages[id].links.forEach( link => {
+		batches.forEach( batch => {
+			Object.keys(batch.query.pages).forEach(id => {
+				batch.query.pages[id].links.forEach( link => {
 					// non-zero ns values are meta-info, not entries, so exclude them
 					if (link.ns === 0) result.add(link.title);
 				})
@@ -13,20 +13,20 @@ const parse = {
 	}
 }
 
-function fetchInfo (titles, cb, prop = "links", data = [], plcontinue) {
+function fetchInfo (titles, cb, prop = "links", batches = [], plcontinue) {
 	$.ajax({
 		url: "https://en.wikipedia.org/w/api.php",
 		data: {
 			action: "query", titles, prop, plcontinue, pllimit: 500, format: "json"
 		},
 		dataType: "jsonp",
-		success: function(res){
-			data.push(res);
+		success: function(batch){
+			batches.push(batch);
 			// res will either have `batchcomplete` or `continue` key
-			if (res.batchcomplete === "") { 
-				cb(parse[prop](data));
+			if (batch.batchcomplete === "") { 
+				cb(parse[prop](batches));
 			} else {
-				fetchInfo(titles, cb, prop, data, res.continue.plcontinue)
+				fetchInfo(titles, cb, prop, batches, batch.continue.plcontinue)
 			}
 		}
 	})

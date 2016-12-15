@@ -9,8 +9,16 @@ class WikiMap extends Graph {
 				});
 			});
 		} else {
-			this.add(page);
+			this.addPage(page);
 			this.explore(page);
 		}
+	}
+
+	addPage(page){
+		return this.addNode(new Node(page));
+	}
+
+	getNode(page){
+		return this.nodes[page];
 	}
 }

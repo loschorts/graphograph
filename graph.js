@@ -40,21 +40,23 @@ class Graph {
 		this.nodes = {};
 		this.edges = {};
 		this.connect = this.connect.bind(this);
+		this.addNode = this.addNode.bind(this);
+		this.addEdge = this.addEdge.bind(this);
 	}
 
-	add(nodeVal){
-		this.nodes[nodeVal] = new Node(nodeVal);
-		return this.nodes;
+	addNode(node) {
+		return this.nodes[node.value] = node;
 	}
 
-	getNode(nodeVal){
-		return this.nodes[nodeVal];
+	addEdge(a, b) {
+		if (a.constructor !== Node || b.constructor !== Node) throw 'invalid nodes'
+		this.edges[a,b] = new Edge(a, b);
 	}
 
 	connect(a, b) {
-		this.nodes[a.value] = a;
-		this.nodes[b.value] = b;
-		this.edges[a,b] = new Edge(a, b);
+		this.addNode(a);
+		this.addNode(b);
+		this.addEdge(a,b);
 	}
 
 	*bfs(queue) {
