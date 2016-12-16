@@ -1,4 +1,4 @@
-class View {
+export class View {
 	constructor(options) {
 		Object.assign(this, options);
 		this.renderer = new THREE.WebGLRenderer();
@@ -15,7 +15,7 @@ class View {
 	}
 }
 
-class Sphere {
+export class Sphere {
 	constructor(view, radius = 50, segments = 16, rings = 16, 
 		position = {z:-300}, color = 0xFFFFFF) {
 
@@ -28,7 +28,7 @@ class Sphere {
 	}
 }
 
-class Light {
+export class Light {
 	constructor(view, color, position){
 		Object.assign(this, {view});
 		this.light = new THREE.PointLight(color)

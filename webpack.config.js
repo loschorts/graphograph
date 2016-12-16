@@ -1,19 +1,21 @@
 module.exports = {
   context: __dirname + "/app",
-  entry: "./index.js",
+  entry: ['babel-polyfill',"./index.js"],
   output: {
       path: __dirname + "/dist",
       filename: "bundle.js"
   },
-  loaders: [
-    {
-      test: /\.js$/,
-      exclude: /(node_modules)/,
-      loader: 'babel',
-      query: {
-        presets: ['es2015']
+  module: {  
+    loaders: [
+      {
+        test: /\.js$/,
+        exclude: /(node_modules)/,
+        loader: 'babel-loader',
+        query: {
+          presets: ['es2015', 'stage-0']
+        }
       }
-    }
-  ],
+    ]
+  },
   devtool: 'source-map'
 }

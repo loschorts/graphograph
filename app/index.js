@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
 
 	window.myWikiMap = new WikiMap();
 	myWikiMap.addPage("Table tennis");
-	window.myExpandGen = x.expand();
+	window.myExpandGen = myWikiMap.expand();
 
 	window.myView = new View({
 		width: window.innerWidth,

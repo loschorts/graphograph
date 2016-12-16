@@ -1,6 +1,7 @@
 import { Graph, Node, Edge } from './graph.js'
 import { fetchInfo } from './util.js'
-class WikiMap extends Graph {
+
+export default class WikiMap extends Graph {
 
 	constructor() {
 		super();
