@@ -1,10 +1,9 @@
 {
   "name": "graphograph",
   "version": "1.0.0",
-  "description": "",
-  "main": "graph.js",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "http-server"
   },
   "repository": {
     "type": "git",
@@ -16,5 +15,13 @@
   "bugs": {
     "url": "https://github.com/loschorts/graphograph/issues"
   },
-  "homepage": "https://github.com/loschorts/graphograph#readme"
+  "homepage": "https://github.com/loschorts/graphograph#readme",
+  "description": "",
+  "devDependencies": {
+    "babel-core": "^6.20.0",
+    "babel-loader": "^6.2.10",
+    "babel-preset-es2015": "^6.18.0",
+    "http-server": "^0.9.0",
+    "webpack": "^1.14.0"
+  }
 }
