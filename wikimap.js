@@ -16,7 +16,7 @@ class WikiMap extends Graph {
 					linkNodes.push(linkNode);
 					this.connect(pageNode, linkNode);
 				});
-				cb(linkNodes);
+				if (cb) cb(linkNodes);
 			});
 		} else {
 			this.addNodeByVal(page);
@@ -24,18 +24,26 @@ class WikiMap extends Graph {
 		}
 	}
 
-	* expand(queue = Object.keys(this.nodes), enqueued = new Set(queue), current) {
+	* expand() {
+		let queue = Object.keys(this.nodes);
+		let enqueued = new Set(queue);
+		let served = new Set();
+		let current;
+
 		while (true) {
 			if (queue.length > 0) {
 				current = queue.shift()
-				this.explore(current, linkNodes => {
-					linkNodes.forEach(linkNode => {
-						if (!enqueued.has(linkNode.value)) {
-							queue.push(linkNode.value);
-							enqueued.add(linkNode.value);
-						}
+				if (!served.has(current)) {
+					this.explore(current, linkNodes => {
+						linkNodes.forEach(linkNode => {
+							if (!enqueued.has(linkNode.value)) {
+								queue.push(linkNode.value);
+								enqueued.add(linkNode.value);
+							}
+						})
 					})
-				})
+					served.add(current);
+				}
 			} 
 			yield current;
 		}
@@ -46,11 +54,3 @@ class WikiMap extends Graph {
 	}
 
 }
-
-function sleep(millis)
-{
-    var date = new Date();
-    var curDate = null;
-    do { curDate = new Date(); }
-    while(curDate-date < millis);
-}		
