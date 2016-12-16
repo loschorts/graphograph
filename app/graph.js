@@ -1,6 +1,4 @@
-"use strict";
-
-class Node {
+export class Node {
 	constructor(value){
 		this.value = value;
 		this.childEdges = new Set();
@@ -19,7 +17,7 @@ class Node {
 
 }
 
-class Edge {
+export class Edge {
 	constructor(parent, child, weight) {
 		this.parent = parent;
 		this.child = child;
@@ -35,7 +33,7 @@ class Edge {
 	}
 }
 
-class Graph {
+export class Graph {
 	constructor(){
 		this.nodes = {};
 		this.edges = {};

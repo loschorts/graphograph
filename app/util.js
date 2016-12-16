@@ -13,7 +13,7 @@ const parse = {
 	}
 }
 
-function fetchInfo (titles, cb, prop = "links", batches = [], plcontinue) {
+export function fetchInfo (titles, cb, prop = "links", batches = [], plcontinue) {
 	$.ajax({
 		url: "https://en.wikipedia.org/w/api.php",
 		data: {

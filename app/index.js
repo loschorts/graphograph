@@ -1,8 +1,11 @@
-let x = new WikiMap();
-x.addPage("Table tennis");
-let gen = x.expand()
+import WikiMap from './wikimap.js';
+import { View, Sphere, Light } from './visual.js';
 
 document.addEventListener("DOMContentLoaded", ()=> {
+
+	window.myWikiMap = new WikiMap();
+	myWikiMap.addPage("Table tennis");
+	window.myExpandGen = x.expand();
 
 	window.myView = new View({
 		width: window.innerWidth,

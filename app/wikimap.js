@@ -1,3 +1,5 @@
+import { Graph, Node, Edge } from './graph.js'
+import { fetchInfo } from './util.js'
 class WikiMap extends Graph {
 
 	constructor() {
@@ -44,7 +46,9 @@ class WikiMap extends Graph {
 					})
 					served.add(current);
 				}
-			} 
+			} else {
+				current = 'NO_NEW_NODES';
+			}
 			yield current;
 		}
 	}
