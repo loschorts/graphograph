@@ -6,12 +6,26 @@ export class View {
 		this.camera = new THREE.PerspectiveCamera(viewAngle, aspect, near, far);
 		this.scene = new THREE.Scene();
 		this.scene.add(this.camera);
-		this.renderer.setSize(options.width, options.height);
+		this.renderer.setSize(this.width, this.height);
 		this.container.appendChild(this.renderer.domElement);
 	}
 
 	render(){
+		[this.width, this.height] = [window.innerWidth, window.innerHeight];
+		this.renderer.setSize(this.width, this.height);
+
+		this.camera.aspect = this.width/this.height;
+		const {viewAngle, aspect, near, far} = this.camera;
+		this.camera = new THREE.PerspectiveCamera(viewAngle, aspect, near, far);
+
 		this.renderer.render(this.scene, this.camera);
+	}
+
+	animate(){
+		this.render();
+		window.requestAnimationFrame(()=>{
+			this.animate();
+		})
 	}
 }
 

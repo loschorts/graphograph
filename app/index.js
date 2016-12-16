@@ -22,6 +22,6 @@ document.addEventListener("DOMContentLoaded", ()=> {
 	window.mySphere = new Sphere(myView);
 	window.myLight = new Light(myView, 0xFFFFFF, {x: 10, y:50, z: 130})
 
-	myView.render();
+	myView.animate();
 
 });
