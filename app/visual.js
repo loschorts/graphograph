@@ -74,7 +74,8 @@ export class UI {
 
 		$slider.prop('min', min);
 		$slider.prop('max', max);
-		// TODO: can't set value
+		// TODO: setting value doesn't work
+		// $slider.prop('value', value);
 		$slider.prop('step', step);
 
 		$(selector).on('input', e => {
@@ -87,7 +88,9 @@ export class UI {
 	}
 
 	canClick(){
-		let sameSpot = this.downPos[0] === this.upPos[0] && this.downPos[1] === this.upPos[1];
+		const [dx, dy] = this.downPos;
+		const [ux, uy] = this.upPos;
+		let sameSpot = dx === ux && dy === uy;
 		this.downPos = this.upPos = undefined;
 		return sameSpot;
 	}
