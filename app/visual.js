@@ -25,13 +25,20 @@ export class View {
 	}
 
 	resize(){
-		[this.width, this.height] = [window.innerWidth, window.innerHeight];
-		this.renderer.setSize(this.width, this.height);
+		let tanFOV = Math.tan( ( ( Math.PI / 180 ) * this.camera.fov / 2 ) );
+  	this.camera.fov = ( 360 / Math.PI ) * Math.atan( tanFOV * ( window.innerHeight / this.height ) );
 
+		[this.width, this.height] = [window.innerWidth, window.innerHeight];
 		this.camera.aspect = this.width/this.height;
+    this.camera.lookAt( this.scene.position );
 		this.camera.updateProjectionMatrix();
+
+		this.renderer.setSize(this.width, this.height);
 	}
 
+	zoom(){
+
+	}
 
 
 	// setZoom(level) {
