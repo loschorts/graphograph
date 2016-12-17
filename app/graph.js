@@ -15,6 +15,22 @@ export class Node {
 		})
 	}
 
+	children() {
+		return this.nodesFor(this.childEdges);
+	}
+
+	parents() {
+		return this.nodesFor(this.parentEdges);
+	}
+
+	nodesFor(edges) {
+		const result = {};
+		Array.from(edges).map(edge => {
+			result[edge.child.value] = edge.child;
+		})
+		return result;		
+	}
+
 }
 
 export class Edge {

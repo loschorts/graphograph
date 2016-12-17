@@ -7,17 +7,13 @@ export class View {
 		this.scene = new THREE.Scene();
 		this.scene.add(this.camera);
 		this.renderer.setSize(this.width, this.height);
+		this.resize = this.resize.bind(this);
 		this.container.appendChild(this.renderer.domElement);
+
+		window.addEventListener('resize', this.resize, false);
 	}
 
 	render(){
-		[this.width, this.height] = [window.innerWidth, window.innerHeight];
-		this.renderer.setSize(this.width, this.height);
-
-		this.camera.aspect = this.width/this.height;
-		const {viewAngle, aspect, near, far} = this.camera;
-		this.camera = new THREE.PerspectiveCamera(viewAngle, aspect, near, far);
-
 		this.renderer.render(this.scene, this.camera);
 	}
 
@@ -27,6 +23,21 @@ export class View {
 			this.animate();
 		})
 	}
+
+	resize(){
+		[this.width, this.height] = [window.innerWidth, window.innerHeight];
+		this.renderer.setSize(this.width, this.height);
+
+		this.camera.aspect = this.width/this.height;
+		this.camera.updateProjectionMatrix();
+	}
+
+
+
+	// setZoom(level) {
+	// 	this.camera.zoom = level;
+	// 	this.render();
+	// }
 }
 
 export class Sphere {

@@ -11,15 +11,16 @@ export default class WikiMap extends Graph {
 
 	explore(page, cb) {
 		const pageNode = this.getNode(page);
-		const linkNodes = [];
+		const cbNodes = [];
 		if (pageNode) {
 			fetchInfo(page, (links) => {
 				links.forEach(link => {
-					const linkNode = new Node(link);
-					linkNodes.push(linkNode);
+					let linkNode = this.getNode(link);
+					if (!linkNode) linkNode = new Node(link);
+					cbNodes.push(linkNode);
 					this.connect(pageNode, linkNode);
 				});
-				if (cb) cb(linkNodes);
+				if (cb) cb(cbNodes);
 			});
 		} else {
 			this.addNodeByVal(page);
