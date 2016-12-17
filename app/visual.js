@@ -36,8 +36,13 @@ export class View {
 		this.renderer.setSize(this.width, this.height);
 	}
 
-	zoom(){
+	showZoom(){
+		return this.camera.zoom;
+	}
 
+	zoom(level){
+		this.camera.zoom = level;
+		this.camera.updateProjectionMatrix();
 	}
 
 
