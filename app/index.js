@@ -26,10 +26,11 @@ document.addEventListener("DOMContentLoaded", ()=> {
 		onDrag: () => console.log('dragging')
 	});
 
+	myUI.slider("#zoom", {min: 0, max: 1, value: .5, step: .01}, myView.zoom.bind(myView));
+
 	window.mySphere = new Sphere(myView);
 	window.myLight = new Light(myView, 0xFFFFFF, {x: 10, y:50, z: 130})
 
-	myView.addTool("#zoom", myView.zoom);
 	myView.animate();
 
 

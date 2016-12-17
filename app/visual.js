@@ -25,15 +25,6 @@ export class View {
 		})
 	}
 
-
-	addTool(selector, cb, preventDefault = false){
-
-		$(selector).on('input', e => {
-			if (preventDefault) e.preventDefault();
-			cb.call(this, e.currentTarget.value);
-		});
-	}
-
 	zoom(level){
 		console.log(level);
 		this.camera.zoom = level;
@@ -74,6 +65,21 @@ export class UI {
 		if (this.mouseDown && this.cbs.onDrag) {
 			this.cbs.onDrag(e);
 		}
+	}
+
+	slider(selector, options, cb){
+
+		const $slider = $(selector);
+		const { value, min, max, step } = options;
+
+		$slider.prop('min', min);
+		$slider.prop('max', max);
+		// TODO: can't set value
+		$slider.prop('step', step);
+
+		$(selector).on('input', e => {
+			cb(e.currentTarget.value);
+		});
 	}
 
 	onMove(e){
