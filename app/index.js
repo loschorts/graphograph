@@ -1,5 +1,5 @@
 import WikiMap from './wikimap.js';
-import { View, Sphere, Light } from './visual.js';
+import { View, Sphere, Light, UI } from './visual.js';
 
 document.addEventListener("DOMContentLoaded", ()=> {
 
@@ -15,13 +15,22 @@ document.addEventListener("DOMContentLoaded", ()=> {
 			aspect: (window.innerWidth / window.innerHeight),
 			near: .1,
 			far: 10000,
+			zoom: .5
 		},
 		container: document.querySelector("#container")
 	})
 
+	window.myUI = new UI(myView, {
+		onClick: () => console.log('clicked'),
+		onMove: () => console.log('move'),
+		onDrag: () => console.log('dragging')
+	});
+
 	window.mySphere = new Sphere(myView);
 	window.myLight = new Light(myView, 0xFFFFFF, {x: 10, y:50, z: 130})
 
+	myView.addTool("#zoom", myView.zoom);
 	myView.animate();
+
 
 });
