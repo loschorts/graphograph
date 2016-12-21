@@ -4,14 +4,23 @@ export class View {
 		this.renderer = new THREE.WebGLRenderer();
 		const {viewAngle, aspect, near, far, zoom} = options.camera
 		this.camera = new THREE.PerspectiveCamera(viewAngle, aspect, near, far);
-		this.zoom(zoom);
+		this.camera.position.z = 1000;
+		// this.zoom(zoom);
 		this.scene = new THREE.Scene();
 		this.scene.add(this.camera);
 		this.renderer.setSize(this.width, this.height);
 		this.resize = this.resize.bind(this);
 		this.container.appendChild(this.renderer.domElement);
-
+		this.setControls();
+		this.shapes = [];
 		window.addEventListener('resize', this.resize, false);
+	}
+
+	setControls(){
+		this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+		this.controls.enableDamping = true;
+		this.controls.dampingFactor = 0.25;
+		this.controls.enableZoom = false;
 	}
 
 	render(){
@@ -19,14 +28,18 @@ export class View {
 	}
 
 	animate(){
+		this.controls.update();
+
+		// this.shapes.forEach( shape => {
+		// 	shape.mesh.rotation.x += 0.01;
+	 //    shape.mesh.rotation.y += 0.02;
+		// })
+
+		window.requestAnimationFrame(this.animate.bind(this));
 		this.render();
-		window.requestAnimationFrame(()=>{
-			this.animate();
-		})
 	}
 
 	zoom(level){
-		console.log(level);
 		this.camera.zoom = level;
 		this.camera.updateProjectionMatrix();
 	}
@@ -47,6 +60,54 @@ export class View {
 		this.renderer.setSize(this.width, this.height);
 	}
 
+}
+
+
+export class Sphere {
+	constructor(view, options) {
+		options = Object.assign({
+			radius: 50,
+			segments: 16,
+			rings: 16,
+			position: {x:0, y: 0, z: 0},
+			color: 0xCCFFFF
+		}, options)
+		const {radius, segments, rings, position, color} = options;
+		Object.assign(this, { view, radius, segments, rings, position });
+		this.geometry = new THREE.SphereGeometry(radius, segments, rings);
+		this.material = new THREE.MeshLambertMaterial({ color });
+		this.mesh = new THREE.Mesh(this.geometry, this.material);
+		Object.assign(this.mesh.position, position);
+		this.view.scene.add(this.mesh);
+	}
+}
+
+export class Cube {
+	constructor(view, options) {
+		options = Object.assign({
+			length: 50, 
+			position: {x:0, y:0, z:0}, 
+			color: 0xFFFFFF
+		}, options)
+
+		const {length, position, color} = options
+		Object.assign(this, {view}, options);
+		this.geometry = new THREE.BoxBufferGeometry( length, length, length );
+		this.material = new THREE.MeshLambertMaterial({ color })
+		this.mesh = new THREE.Mesh(this.geometry, this.material);
+		Object.assign(this.mesh.position, position);
+		this.view.scene.add(this.mesh);
+
+	}
+}
+
+export class Light {
+	constructor(view, color, position){
+		Object.assign(this, {view});
+		this.light = new THREE.PointLight(color)
+		Object.assign(this.light.position, position);
+		this.view.scene.add(this.light);
+	}
 }
 
 export class UI {
@@ -107,27 +168,5 @@ export class UI {
 		$(this.domElement).click(this.onClick.bind(this));
 		$(this.domElement).mousemove(this.onDrag.bind(this));
 		$(this.domElement).mousemove(this.onMove.bind(this));
-	}
-}
-
-export class Sphere {
-	constructor(view, radius = 50, segments = 16, rings = 16, 
-		position = {x:0, y: 0, z:-300}, color = 0xFFFFFF) {
-
-		Object.assign(this, { view, radius, segments, rings, position });
-		this.sphereGeometry = new THREE.SphereGeometry(radius, segments, rings);
-		this.material = new THREE.MeshLambertMaterial({ color });
-		this.mesh = new THREE.Mesh(this.sphereGeometry, this.material);
-		Object.assign(this.mesh.position, position);
-		this.view.scene.add(this.mesh);
-	}
-}
-
-export class Light {
-	constructor(view, color, position){
-		Object.assign(this, {view});
-		this.light = new THREE.PointLight(color)
-		Object.assign(this.light.position, position);
-		this.view.scene.add(this.light);
 	}
 }
