@@ -2,25 +2,42 @@ export class View {
 	constructor(options) {
 		Object.assign(this, options);
 		this.renderer = new THREE.WebGLRenderer();
-		const {viewAngle, aspect, near, far, zoom} = options.camera
+		const { viewAngle, aspect, near, far, zoom } = options.camera
 		this.camera = new THREE.PerspectiveCamera(viewAngle, aspect, near, far);
 		this.camera.position.z = 1000;
-		// this.zoom(zoom);
+		this.zoom(zoom);
 		this.scene = new THREE.Scene();
 		this.scene.add(this.camera);
 		this.renderer.setSize(this.width, this.height);
 		this.resize = this.resize.bind(this);
 		this.container.appendChild(this.renderer.domElement);
 		this.setControls();
-		this.shapes = [];
+		this.objects = [];
+		this.lights = [];
 		window.addEventListener('resize', this.resize, false);
+	}
+
+	addObject(type, options){
+		switch (type) {
+			case 'cube': 
+			this.objects.push(new Cube(this, options))
+			break;
+			case 'sphere':
+			this.objects.push(new Sphere(this, options))
+			break;
+		}
+		return this.objects[this.objects.length-1];
+	}
+
+	addLight(color, position){
+		this.lights.push(new Light(this, color, position));
 	}
 
 	setControls(){
 		this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
 		this.controls.enableDamping = true;
 		this.controls.dampingFactor = 0.25;
-		this.controls.enableZoom = false;
+		this.controls.enableZoom = true;
 	}
 
 	render(){
@@ -30,9 +47,9 @@ export class View {
 	animate(){
 		this.controls.update();
 
-		// this.shapes.forEach( shape => {
-		// 	shape.mesh.rotation.x += 0.01;
-	 //    shape.mesh.rotation.y += 0.02;
+		// this.objects.forEach( object => {
+		// 	object.mesh.rotation.x += 0.01;
+	 //    object.mesh.rotation.y += 0.02;
 		// })
 
 		window.requestAnimationFrame(this.animate.bind(this));

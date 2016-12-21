@@ -1,5 +1,5 @@
 import WikiMap from './wikimap.js';
-import { View, Sphere, Cube, Light } from './visual.js';
+import { View, Sphere, Cube, Light } from './view.js';
 import Detector from '../lib/detector.js';
 
 document.addEventListener("DOMContentLoaded", ()=> {
@@ -31,11 +31,16 @@ document.addEventListener("DOMContentLoaded", ()=> {
 
 	// myUI.slider("#zoom", {min: 0, max: 1, value: .5, step: .01}, myView.zoom.bind(myView));
 
-	window.myCube = new Cube(myView,{position: {x:100, y: 0, z: 0}});
-	window.mySphere = new Sphere(myView, {position: {x: -100, y:0, z:0}})
-	window.topLight = new Light(myView, 0xFFFFFF, {x: 0, y:1000, z: 0})
-	window.bottomLight = new Light(myView, 0x787877, {x: 0, y:-1000, z:0})
-	myView.shapes.push(window.myShape, mySphere);
+	myView.addObject('cube', {position: {x: 100, y: 0, z: 0}});
+	myView.addObject('sphere', {position: {x: -100, y:0, z:0}});
+
+	myView.addLight(0xFFFFFF, {x: 0, y:1000, z: 0})
+	myView.addLight(0x787877, {x: 0, y:-1000, z:0})
+	myView.addLight(0xFFFFFF, {x: -1000, y: 0, z: 0})
+	myView.addLight(0xFFFFFF, {x: 1000, y: 0, z: 0})
+	myView.addLight(0xFFFFFF, {x: 0, y: 0, z: 1000})
+	myView.addLight(0xFFFFFF, {x: 0, y: 0, z: -1000})
+
 	myView.animate();
 
 });
