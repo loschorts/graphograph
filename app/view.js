@@ -1,4 +1,4 @@
-export class View {
+export default class View {
 	constructor(options) {
 		Object.assign(this, options);
 		this.renderer = new THREE.WebGLRenderer();
@@ -18,14 +18,19 @@ export class View {
 	}
 
 	addObject(type, options){
+		let x;
 		switch (type) {
 			case 'cube': 
-			this.objects.push(new Cube(this, options))
+			this.objects.push(x = new Cube(this, options))
 			break;
 			case 'sphere':
-			this.objects.push(new Sphere(this, options))
+			this.objects.push(x = new Sphere(this, options))
 			break;
 		}
+
+		x.on('click', ()=>{
+			alert();
+		})
 		return this.objects[this.objects.length-1];
 	}
 
@@ -47,10 +52,10 @@ export class View {
 	animate(){
 		this.controls.update();
 
-		// this.objects.forEach( object => {
-		// 	object.mesh.rotation.x += 0.01;
-	 //    object.mesh.rotation.y += 0.02;
-		// })
+		this.objects.forEach( object => {
+			object.mesh.rotation.x += 0.01;
+	    object.mesh.rotation.y += 0.02;
+		})
 
 		window.requestAnimationFrame(this.animate.bind(this));
 		this.render();
@@ -76,9 +81,7 @@ export class View {
 
 		this.renderer.setSize(this.width, this.height);
 	}
-
 }
-
 
 export class Sphere {
 	constructor(view, options) {
@@ -114,7 +117,6 @@ export class Cube {
 		this.mesh = new THREE.Mesh(this.geometry, this.material);
 		Object.assign(this.mesh.position, position);
 		this.view.scene.add(this.mesh);
-
 	}
 }
 
@@ -124,66 +126,5 @@ export class Light {
 		this.light = new THREE.PointLight(color)
 		Object.assign(this.light.position, position);
 		this.view.scene.add(this.light);
-	}
-}
-
-export class UI {
-	constructor(view, cbs = {}) {
-		Object.assign(this, {view, cbs});
-		this.domElement = this.view.renderer.domElement
-		this.mouseDown = false;
-		this.attachListeners();
-	}
-
-	onClick(e){
-		if (this.cbs.onClick && this.canClick()) this.cbs.onClick(e);
-	}
-
-	onDrag(e){
-		if (this.mouseDown && this.cbs.onDrag) {
-			this.cbs.onDrag(e);
-		}
-	}
-
-	slider(selector, options, cb){
-
-		const $slider = $(selector);
-		const { value, min, max, step } = options;
-
-		$slider.prop('min', min);
-		$slider.prop('max', max);
-		// TODO: setting value doesn't work
-		// $slider.prop('value', value);
-		$slider.prop('step', step);
-
-		$(selector).on('input', e => {
-			cb(e.currentTarget.value);
-		});
-	}
-
-	onMove(e){
-		if (this.cbs.onMove) this.cbs.onMove(e);
-	}
-
-	canClick(){
-		const [dx, dy] = this.downPos;
-		const [ux, uy] = this.upPos;
-		let sameSpot = dx === ux && dy === uy;
-		this.downPos = this.upPos = undefined;
-		return sameSpot;
-	}
-
-	attachListeners() {
-		$(this.domElement).mousedown((e) => {
-			this.mouseDown = true
-			this.downPos = [e.clientX, e.clientY]
-		});
-		$(this.domElement).mouseup((e) => {
-			this.mouseDown = false
-			this.upPos = [e.clientX, e.clientY]
-		});
-		$(this.domElement).click(this.onClick.bind(this));
-		$(this.domElement).mousemove(this.onDrag.bind(this));
-		$(this.domElement).mousemove(this.onMove.bind(this));
 	}
 }
