@@ -1,6 +1,13 @@
 export default class View {
 	constructor(options) {
 		Object.assign(this, options);
+
+		this.objects = [];
+		this.lights = [];
+
+		this.raycaster = new THREE.Raycaster();
+		this.mouse = new THREE.Vector2();
+
 		this.renderer = new THREE.WebGLRenderer();
 		const { viewAngle, aspect, near, far, zoom } = options.camera
 		this.camera = new THREE.PerspectiveCamera(viewAngle, aspect, near, far);
@@ -12,9 +19,35 @@ export default class View {
 		this.resize = this.resize.bind(this);
 		this.container.appendChild(this.renderer.domElement);
 		this.setControls();
-		this.objects = [];
-		this.lights = [];
-		window.addEventListener('resize', this.resize, false);
+		this.setLighting();
+		window.addEventListener('resize', this.resize.bind(this), false);
+		window.addEventListener( 'mousemove', this.onMouseMove.bind(this), false );
+
+	}
+
+	onMouseMove( event ) {
+
+		// calculate mouse position in normalized device coordinates
+		// (-1 to +1) for both components
+		this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+		this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+	}
+
+	setLighting(){
+		this.addLight(0xFFC300, {x: 0, y:10000, z: 0})
+		this.addLight(0x787877, {x: 0, y:-10000, z:0})
+		this.addLight(0xECE81B, {x: -10000, y: 0, z: 0})
+		this.addLight(0xFF5733, {x: 10000, y: 0, z: 0})
+		this.addLight(0xDAF7A6, {x: 0, y: 0, z: 10000})
+		this.addLight(0x900C3F, {x: 0, y: 0, z: -10000})
+	}
+
+	setControls(){
+		this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+		this.controls.enableDamping = true;
+		this.controls.dampingFactor = 0.25;
+		this.controls.enableZoom = true;
 	}
 
 	addObject(type, options){
@@ -28,9 +61,6 @@ export default class View {
 			break;
 		}
 
-		x.on('click', ()=>{
-			alert();
-		})
 		return this.objects[this.objects.length-1];
 	}
 
@@ -38,14 +68,16 @@ export default class View {
 		this.lights.push(new Light(this, color, position));
 	}
 
-	setControls(){
-		this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
-		this.controls.enableDamping = true;
-		this.controls.dampingFactor = 0.25;
-		this.controls.enableZoom = true;
-	}
 
 	render(){
+		this.raycaster.setFromCamera( this.mouse, this.camera );
+		// calculate objects intersecting the picking ray
+		const intersects = this.raycaster.intersectObjects( this.scene.children );
+
+		intersects.forEach(intersect => {
+			intersect.object.material.color.set(0x21EC1B);
+		});
+
 		this.renderer.render(this.scene, this.camera);
 	}
 

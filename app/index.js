@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
 	if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
 	window.myWikiMap = new WikiMap();
-	myWikiMap.addPage("World War II");
+	myWikiMap.addPage("Wikipedia");
 	window.myExpandGen = myWikiMap.expand();
 	myExpandGen.next();
 
@@ -23,14 +23,6 @@ document.addEventListener("DOMContentLoaded", ()=> {
 		},
 		container: document.querySelector("#container")
 	});
-
-
-	myView.addLight(0xFFC300, {x: 0, y:10000, z: 0})
-	myView.addLight(0x787877, {x: 0, y:-10000, z:0})
-	myView.addLight(0xECE81B, {x: -10000, y: 0, z: 0})
-	myView.addLight(0xFF5733, {x: 10000, y: 0, z: 0})
-	myView.addLight(0xDAF7A6, {x: 0, y: 0, z: 10000})
-	myView.addLight(0x900C3F, {x: 0, y: 0, z: -10000})
 
 	myView.animate();
 
