@@ -8,6 +8,11 @@ export default class View {
 		this.raycaster = new THREE.Raycaster();
 		this.mouse = new THREE.Vector2();
 
+		this.intersectCbs = {
+			click: i => i.object.material.color.set(0x21EC1B),
+			dblclick: i => i.object.material.color.set(0xEC1BCF)
+		}
+
 		this.renderer = new THREE.WebGLRenderer();
 		const { viewAngle, aspect, near, far, zoom } = options.camera
 		this.camera = new THREE.PerspectiveCamera(viewAngle, aspect, near, far);
@@ -21,17 +26,21 @@ export default class View {
 		this.setControls();
 		this.setLighting();
 		window.addEventListener('resize', this.resize.bind(this), false);
-		window.addEventListener( 'mousemove', this.onMouseMove.bind(this), false );
+		// window.addEventListener( 'mousemove', this.setMouseXY.bind(this), false );
+		window.addEventListener( 'dblclick', this.onDblclick.bind(this), false );
 
 	}
 
-	onMouseMove( event ) {
-
+	onDblclick( event ) {
+		this.dblclicked = true;
+		this.setMouseXY();
 		// calculate mouse position in normalized device coordinates
 		// (-1 to +1) for both components
+	}
+
+	setMouseXY(){
 		this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 		this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-
 	}
 
 	setLighting(){
@@ -68,15 +77,21 @@ export default class View {
 		this.lights.push(new Light(this, color, position));
 	}
 
+	raycast() {
+		this.raycaster.setFromCamera( this.mouse, this.camera );
+		const intersects = this.raycaster.intersectObjects( this.scene.children );
+		if (intersects.length > 0) {
+			if (this.dblclicked) {
+				this.intersectCbs.dblclick(intersects[0]);
+			} 
+		}
+
+		this.dblclicked = false
+	}
+
 
 	render(){
-		this.raycaster.setFromCamera( this.mouse, this.camera );
-		// calculate objects intersecting the picking ray
-		const intersects = this.raycaster.intersectObjects( this.scene.children );
-
-		intersects.forEach(intersect => {
-			intersect.object.material.color.set(0x21EC1B);
-		});
+		this.raycast();
 
 		this.renderer.render(this.scene, this.camera);
 	}
