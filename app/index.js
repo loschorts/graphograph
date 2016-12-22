@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", ()=> {
 	window.myWikiMap = new WikiMap();
 	myWikiMap.addPage("Wikipedia");
 	window.myExpandGen = myWikiMap.expand();
-	myExpandGen.next();
 
 	window.myView = new View({
 		width: window.innerWidth,
@@ -20,6 +19,10 @@ document.addEventListener("DOMContentLoaded", ()=> {
 			near: 1,
 			far: 10000,
 			zoom: .5
+		},
+		uxcbs: {
+			click: i => i.object.material.color.set(0x21EC1B),
+			dblclick: i => i.object.material.color.set(0xEC1BCF)
 		},
 		container: document.querySelector("#container")
 	});

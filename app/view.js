@@ -1,5 +1,5 @@
 export default class View {
-	constructor(options, uxcbs) {
+	constructor(options) {
 		Object.assign(this, options);
 
 		this.objects = [];
@@ -7,11 +7,6 @@ export default class View {
 
 		this.raycaster = new THREE.Raycaster();
 		this.mouse = new THREE.Vector2();
-
-		this.uxcbs = {
-			click: i => i.object.material.color.set(0x21EC1B),
-			dblclick: i => i.object.material.color.set(0xEC1BCF)
-		}
 
 		this.renderer = new THREE.WebGLRenderer();
 		const { viewAngle, aspect, near, far, zoom } = options.camera
@@ -52,13 +47,12 @@ export default class View {
 	}
 
 	addObject(type, options){
-		let x;
 		switch (type) {
 			case 'cube': 
-			this.objects.push(x = new Cube(this, options))
+			this.objects.push(new Cube(this, options))
 			break;
 			case 'sphere':
-			this.objects.push(x = new Sphere(this, options))
+			this.objects.push(new Sphere(this, options))
 			break;
 		}
 
@@ -76,14 +70,11 @@ export default class View {
 		this.raycaster.setFromCamera( this.mouse, this.camera );
 		const intersects = this.raycaster.intersectObjects( this.scene.children );
 		
-		if (intersects.length > 0) {
-			this.uxcbs[e.type](intersects[0]);
-		}
+		if (intersects.length > 0) this.uxcbs[e.type](intersects[0]);
 	}
 
 
 	render(){
-
 		this.renderer.render(this.scene, this.camera);
 	}
 
