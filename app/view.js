@@ -1,5 +1,5 @@
 export default class View {
-	constructor(options) {
+	constructor(options, uxcbs) {
 		Object.assign(this, options);
 
 		this.objects = [];
@@ -8,7 +8,7 @@ export default class View {
 		this.raycaster = new THREE.Raycaster();
 		this.mouse = new THREE.Vector2();
 
-		this.intersectCbs = {
+		this.uxcbs = {
 			click: i => i.object.material.color.set(0x21EC1B),
 			dblclick: i => i.object.material.color.set(0xEC1BCF)
 		}
@@ -28,20 +28,22 @@ export default class View {
 		window.addEventListener('resize', this.resize.bind(this), false);
 		// window.addEventListener( 'mousemove', this.setMouseXY.bind(this), false );
 		window.addEventListener( 'dblclick', this.onDblclick.bind(this), false );
+		window.addEventListener( 'click', this.onClick.bind(this), false );
 
 	}
 
-	onDblclick( event ) {
-		this.dblclicked = true;
-		this.setMouseXY();
+	onDblclick( e ) {
+		this.mouseaction = 'dblclick';
+		this.raycast(e);
 		// calculate mouse position in normalized device coordinates
 		// (-1 to +1) for both components
 	}
 
-	setMouseXY(){
-		this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-		this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+	onClick (e) {
+		this.mouseaction = 'click';
+		this.raycast(e);
 	}
+
 
 	setLighting(){
 		this.addLight(0xFFC300, {x: 0, y:10000, z: 0})
@@ -77,21 +79,27 @@ export default class View {
 		this.lights.push(new Light(this, color, position));
 	}
 
-	raycast() {
+	raycast(e) {
+		this.mouse.x = ( e.clientX / window.innerWidth ) * 2 - 1;
+		this.mouse.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
+
 		this.raycaster.setFromCamera( this.mouse, this.camera );
 		const intersects = this.raycaster.intersectObjects( this.scene.children );
+		
 		if (intersects.length > 0) {
-			if (this.dblclicked) {
-				this.intersectCbs.dblclick(intersects[0]);
-			} 
+			switch (this.mouseaction) {
+				case 'dblclick': 
+				this.uxcbs.dblclick(intersects[0]);
+				break;
+				case 'click':
+				this.uxcbs.click(intersects[0])
+				break;
+			}
 		}
-
-		this.dblclicked = false
 	}
 
 
 	render(){
-		this.raycast();
 
 		this.renderer.render(this.scene, this.camera);
 	}
