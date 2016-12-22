@@ -25,25 +25,15 @@ export default class View {
 		this.container.appendChild(this.renderer.domElement);
 		this.setControls();
 		this.setLighting();
+		this.attachListeners();
+
+	}
+
+	attachListeners() {
 		window.addEventListener('resize', this.resize.bind(this), false);
-		// window.addEventListener( 'mousemove', this.setMouseXY.bind(this), false );
-		window.addEventListener( 'dblclick', this.onDblclick.bind(this), false );
-		window.addEventListener( 'click', this.onClick.bind(this), false );
-
+		window.addEventListener( 'dblclick', this.raycast.bind(this), false );
+		window.addEventListener( 'click', this.raycast.bind(this), false );
 	}
-
-	onDblclick( e ) {
-		this.mouseaction = 'dblclick';
-		this.raycast(e);
-		// calculate mouse position in normalized device coordinates
-		// (-1 to +1) for both components
-	}
-
-	onClick (e) {
-		this.mouseaction = 'click';
-		this.raycast(e);
-	}
-
 
 	setLighting(){
 		this.addLight(0xFFC300, {x: 0, y:10000, z: 0})
@@ -87,14 +77,7 @@ export default class View {
 		const intersects = this.raycaster.intersectObjects( this.scene.children );
 		
 		if (intersects.length > 0) {
-			switch (this.mouseaction) {
-				case 'dblclick': 
-				this.uxcbs.dblclick(intersects[0]);
-				break;
-				case 'click':
-				this.uxcbs.click(intersects[0])
-				break;
-			}
+			this.uxcbs[e.type](intersects[0]);
 		}
 	}
 
