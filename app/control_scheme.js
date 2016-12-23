@@ -1,7 +1,7 @@
 class ControlScheme {
 	constructor(view, handlers){
 		Object.assign(this, {view, handlers });
-		this.enabled = true;
+		// this.enabled = true;
 		this.raycaster = new THREE.Raycaster();
 		this.mouse = new THREE.Vector2();
 

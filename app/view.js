@@ -1,7 +1,7 @@
 import { Sphere, Cube, Light, ParticleField } from './objects.js'
 
 export default class View {
-	constructor(options) {
+	constructor(options, controller) {
 		Object.assign(this, options);
 
 		this.objects = [];
@@ -10,8 +10,7 @@ export default class View {
 		this.renderer = new THREE.WebGLRenderer();
 		const { viewAngle, aspect, near, far, zoom } = options.camera
 		this.camera = new THREE.PerspectiveCamera(viewAngle, aspect, near, far);
-		this.camera.position.z = 10000;
-		this.zoom(zoom);
+		this.camera.position.z = 1000;
 		this.scene = new THREE.Scene();
 		this.scene.add(this.camera);
 		this.renderer.setSize(this.width, this.height);
@@ -50,22 +49,13 @@ export default class View {
 	}
 
 	render(){
-		if (this.controls) this.controls.getInput();
 		this.renderer.render(this.scene, this.camera);
 	}
 
 	animate(){
+		if (this.controller) this.controller.getInput();
 		window.requestAnimationFrame(this.animate.bind(this));
 		this.render();
-	}
-
-	zoom(level){
-		this.camera.zoom = level;
-		this.camera.updateProjectionMatrix();
-	}
-
-	move(x, y) {
-		this.camera.updateProjectionMatrix();
 	}
 
 	resize(){
@@ -80,7 +70,4 @@ export default class View {
 		this.renderer.setSize(this.width, this.height);
 	}
 
-	randomParticles(){
-		this.particles = new ParticleField(this);
-	}
 }

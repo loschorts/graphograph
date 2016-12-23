@@ -49,7 +49,8 @@ export class Light {
 export class ParticleField {
 	constructor(view) {
 
-		const particleCount = 100000,
+		const particleCount = 1000,
+		distribRange = 1000,
     particles = new THREE.Geometry(),
     pMaterial = new THREE.PointsMaterial({
       color: 0xFFFFFF,
@@ -62,13 +63,12 @@ export class ParticleField {
     });
 
     THREE.TextureLoader, ("images/particle.png",(e)=>{
-    	console.log('loaded')
     	pMaterial.map = event.content;
     })
 
 		let particle, pos;
 		for (let p = 0; p < particleCount; p++) {
-		  particles.vertices.push(new THREE.Vector3(...randCoord(10000)));
+		  particles.vertices.push(new THREE.Vector3(...randCoord(distribRange)));
 		}
 
 		var particleSystem = new THREE.Points(
