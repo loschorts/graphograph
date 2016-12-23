@@ -1,9 +1,9 @@
 import WikiMap from './wikimap.js';
 import Detector from '../lib/detector.js';
 import View from './view.js';
-import {ParticleField} from './objects.js'
+import { ParticleField, Line } from './objects.js'
 import { OrbitControlScheme } from './control_scheme.js'
-
+import {randCoord} from './util.js'
 
 document.addEventListener("DOMContentLoaded", ()=> {
 
@@ -31,7 +31,20 @@ document.addEventListener("DOMContentLoaded", ()=> {
 		dblclick: i => i.object.material.color.set(0xEC1BCF)
 	})
 
+	window.myLine = new Line(myView, 0xFFFFFF, [
+		[0,0,0],
+		[1000,1000,1000]
+	])
 
+	// let x,y,z;
+	// for ( let i = 0 ; i < 10000 ; i ++ ) {
+	// 	[x,y,z] = randCoord(10000);
+	// 	myView.addObject('cube', {
+	// 		length: 20,
+	// 		position: {x,y,z},
+	// 		color: 0xFFFFFF
+	// 	});
+	// }
 
 	new ParticleField(myView);
 

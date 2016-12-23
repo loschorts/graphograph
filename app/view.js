@@ -1,4 +1,4 @@
-import { Sphere, Cube, Light, ParticleField } from './objects.js'
+import { Sphere, Cube, Light, Line, ParticleField } from './objects.js'
 
 export default class View {
 	constructor(options, controller) {

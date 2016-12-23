@@ -46,6 +46,26 @@ export class Light {
 	}
 }
 
+export class Line {
+	constructor(view, color, vertices){
+		Object.assign(this, {color, vertices})
+		const material = new THREE.LineBasicMaterial({
+			color,
+			opacity: .5
+		});
+
+		const v3s = vertices.map(v => new THREE.Vector3(...v))
+
+		const geometry = new THREE.Geometry();
+		geometry.vertices.push(...v3s);
+
+		window.xline = new THREE.Line(geometry, material);
+
+		view.scene.add(xline);
+		
+	}
+}
+
 export class ParticleField {
 	constructor(view) {
 
