@@ -110,6 +110,10 @@ export default class View {
 
 		this.renderer.setSize(this.width, this.height);
 	}
+
+	randomParticles(){
+		this.particles = new ParticleField(this);
+	}
 }
 
 export class Sphere {
@@ -157,3 +161,46 @@ export class Light {
 		this.view.scene.add(this.light);
 	}
 }
+
+export class ParticleField {
+	constructor(view) {
+
+		const particleCount = 1800,
+    particles = new THREE.Geometry(),
+    pMaterial = new THREE.PointsMaterial({
+      color: 0xFFFFFF,
+      size: 20
+    });
+
+		// now create the individual particles
+		let particle, pos;
+		for (let p = 0; p < particleCount; p++) {
+
+		  // create a particle with random
+		  // position values, -250 -> 250
+		  pos = randCoord(500);
+      particle = new THREE.Vector3(...pos);
+
+		  // add it to the geometry
+		  particles.vertices.push(particle);
+		}
+
+		// create the particle system
+		var particleSystem = new THREE.Points(
+		    particles,
+		    pMaterial);
+
+		// add it to the scene
+		view.scene.add(particleSystem);
+	}
+}
+
+function randCoord(range) {
+	return [
+		2 * range * Math.random() - range,
+		2 * range * Math.random() - range,
+		2 * range * Math.random() - range,
+	];
+}
+
+

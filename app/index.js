@@ -1,11 +1,12 @@
 import WikiMap from './wikimap.js';
 import View from './view.js';
 import Detector from '../lib/detector.js';
+import {ParticleField} from './view.js';
 
 document.addEventListener("DOMContentLoaded", ()=> {
 
 	if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
-
+	window.Detector = Detector;
 	window.myWikiMap = new WikiMap();
 	myWikiMap.addPage("Wikipedia");
 	window.myExpandGen = myWikiMap.expand();
@@ -27,17 +28,8 @@ document.addEventListener("DOMContentLoaded", ()=> {
 		container: document.querySelector("#container")
 	});
 
+	myView.randomParticles();
+
 	myView.animate();
 
 });
-
-function mapNodes(wikiMap, view){
-	let x,y,z;
-	Object.keys(wikiMap.nodes).forEach(key => {
-		[x,y,z] = [2000 * Math.random() - 1000, 2000 * Math.random() - 1000, 2000 * Math.random() - 1000];
-		view.addObject('cube', {position: {x,y,z}});
-
-	})
-}
-
-window.mapNodes = mapNodes;
