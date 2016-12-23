@@ -1,17 +1,19 @@
 import WikiMap from './wikimap.js';
-import View from './view.js';
 import Detector from '../lib/detector.js';
-import {ParticleField} from './view.js';
+import View from './view.js';
+import { OrbitControlScheme } from './control_scheme.js'
+
 
 document.addEventListener("DOMContentLoaded", ()=> {
 
 	if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
-	window.Detector = Detector;
-	window.myWikiMap = new WikiMap();
-	myWikiMap.addPage("Wikipedia");
-	window.myExpandGen = myWikiMap.expand();
+
+	// window.myWikiMap = new WikiMap();
+	// myWikiMap.addPage("Wikipedia");
+	// window.myExpandGen = myWikiMap.expand();
 
 	window.myView = new View({
+		container: document.querySelector("#container"),
 		width: window.innerWidth,
 		height: window.innerHeight,
 		camera: {
@@ -20,12 +22,12 @@ document.addEventListener("DOMContentLoaded", ()=> {
 			near: 1,
 			far: 10000,
 			zoom: .5
-		},
-		uxcbs: {
-			click: i => i.object.material.color.set(0x21EC1B),
-			dblclick: i => i.object.material.color.set(0xEC1BCF)
-		},
-		container: document.querySelector("#container")
+		}
+	});
+
+	myView.controlScheme = new OrbitControlScheme(myView, {
+		click: i => i.object.material.color.set(0x21EC1B),
+		dblclick: i => i.object.material.color.set(0xEC1BCF)
 	});
 
 	myView.randomParticles();

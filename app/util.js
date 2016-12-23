@@ -32,3 +32,10 @@ export function fetchInfo (titles, cb, prop = "links", batches = [], plcontinue)
 	})
 }
 
+export function randCoord(range) {
+	return [
+		2 * range * Math.random() - range,
+		2 * range * Math.random() - range,
+		2 * range * Math.random() - range,
+	];
+}
