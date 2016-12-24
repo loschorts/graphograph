@@ -5,13 +5,16 @@ import { ParticleField, Line } from './objects.js'
 import { OrbitControlScheme } from './control_scheme.js'
 import {randCoord} from './util.js'
 
+import Heap from './heap.js';
+window.Heap = Heap;
+
 document.addEventListener("DOMContentLoaded", ()=> {
 
 	if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
-	// window.myWikiMap = new WikiMap();
-	// myWikiMap.addPage("Wikipedia");
-	// window.myExpandGen = myWikiMap.expand();
+	window.myWikiMap = new WikiMap();
+	myWikiMap.addPage("Wikipedia");
+	window.myExpandGen = myWikiMap.expand();
 
 	window.myView = new View({
 		container: document.querySelector("#container"),
@@ -31,22 +34,13 @@ document.addEventListener("DOMContentLoaded", ()=> {
 		dblclick: i => i.object.material.color.set(0xEC1BCF)
 	})
 
-	window.myLine = new Line(myView, 0xFFFFFF, [
-		[0,0,0],
-		[1000,1000,1000]
-	])
+	const positions = [];
 
-	// let x,y,z;
-	// for ( let i = 0 ; i < 10000 ; i ++ ) {
-	// 	[x,y,z] = randCoord(10000);
-	// 	myView.addObject('cube', {
-	// 		length: 20,
-	// 		position: {x,y,z},
-	// 		color: 0xFFFFFF
-	// 	});
-	// }
+	const levels = {}
 
-	new ParticleField(myView);
+	// levels[myWikiMap.nodes[0].value] = 0;
+
+	new ParticleField(myView, positions);
 
 	myView.animate();
 

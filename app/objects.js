@@ -67,10 +67,9 @@ export class Line {
 }
 
 export class ParticleField {
-	constructor(view) {
+	constructor(view, positions) {
 
-		const particleCount = 1000,
-		distribRange = 1000,
+		const particleCount = positions.length,
     particles = new THREE.Geometry(),
     pMaterial = new THREE.PointsMaterial({
       color: 0xFFFFFF,
@@ -82,14 +81,15 @@ export class ParticleField {
       transparent: true
     });
 
-    THREE.TextureLoader, ("images/particle.png",(e)=>{
+    THREE.TextureLoader, ("images/particle.png",(e) => {
     	pMaterial.map = event.content;
     })
 
 		let particle, pos;
-		for (let p = 0; p < particleCount; p++) {
-		  particles.vertices.push(new THREE.Vector3(...randCoord(distribRange)));
-		}
+		
+		positions.forEach( position => {
+		  particles.vertices.push(new THREE.Vector3(...position));
+		})
 
 		var particleSystem = new THREE.Points(
 		    particles,
