@@ -24,11 +24,7 @@ export class Node {
 	}
 
 	nodesFor(edges) {
-		const result = {};
-		Array.from(edges).map(edge => {
-			result[edge.child.value] = edge.child;
-		})
-		return result;		
+		return Array.from(edges).map(edge => edge.child);
 	}
 
 }
@@ -52,7 +48,6 @@ export class Edge {
 export class Graph {
 	constructor(){
 		this.nodes = {};
-		this.edges = {};
 		this.connect = this.connect.bind(this);
 		this.addNode = this.addNode.bind(this);
 		this.addEdge = this.addEdge.bind(this);
@@ -63,7 +58,7 @@ export class Graph {
 	}
 
 	addEdge(a, b) {
-		this.edges[[a,b]] = new Edge(a, b);
+		new Edge(a, b);
 	}
 
 	addNodeByVal(val){
@@ -79,8 +74,6 @@ export class Graph {
 	}
 
 	connect(a, b) {
-		this.addNode(a);
-		this.addNode(b);
 		this.addEdge(a,b);
 	}
 

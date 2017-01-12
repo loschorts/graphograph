@@ -1,21 +1,10 @@
 export default class Heap {
 	constructor(nodes, compareCb) {
 		Object.assign(this, { nodes, compareCb });
-
-		if (!this.compareCb) this.compareCb = (a,b) => {
-			switch (true) {
-				case (a < b): 
-					return -1;
-				case (a === b): 
-					return 0;
-				case (a > b):
-					return 1;
-			}
-		}
 		this.store = [];
 		this.indexOf = {};
-
-		if (nodes) nodes.forEach( node =>{
+		this.ensureCb();
+		if (nodes) nodes.forEach(node => {
 			this.add(node);
 		});
 	}
@@ -35,9 +24,22 @@ export default class Heap {
 	add(node){
 		this.store.push(node);
 		this.heapifyUp(this.store.length-1);
+		return node;
 	}
 
 	// should be private
+	ensureCb(){
+		if (!this.compareCb) this.compareCb = (a,b) => {
+			switch (true) {
+				case (a < b): 
+					return -1;
+				case (a === b): 
+					return 0;
+				case (a > b):
+					return 1;
+			}
+		}
+	}
 	parent(idx) {
 		return Math.floor((idx - 1) / 2)
 	}

@@ -10,38 +10,40 @@ window.Heap = Heap;
 
 document.addEventListener("DOMContentLoaded", ()=> {
 
-	if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
-
+	// if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 	window.myWikiMap = new WikiMap();
-	myWikiMap.addPage("Wikipedia");
-	window.myExpandGen = myWikiMap.expand();
-
-	window.myView = new View({
-		container: document.querySelector("#container"),
-		width: window.innerWidth,
-		height: window.innerHeight,
-		camera: {
-			viewAngle: 75,
-			aspect: window.innerWidth / window.innerHeight,
-			near: 1,
-			far: 10000,
-			zoom: .5
+	myWikiMap.explore("Donald Trump", () => {
+		for (let x = 0; x < 1000; x++) {
+			console.log(x);
+			myWikiMap.expand();
 		}
 	});
+	// window.myView = new View({
+	// 	container: document.querySelector("#container"),
+	// 	width: window.innerWidth,
+	// 	height: window.innerHeight,
+	// 	camera: {
+	// 		viewAngle: 75,
+	// 		aspect: window.innerWidth / window.innerHeight,
+	// 		near: 1,
+	// 		far: 10000,
+	// 		zoom: .5
+	// 	}
+	// });
 
-	myView.controller = new OrbitControlScheme(myView, {
-		click: i => i.object.material.color.set(0x21EC1B),
-		dblclick: i => i.object.material.color.set(0xEC1BCF)
-	})
+	// myView.controller = new OrbitControlScheme(myView, {
+	// 	click: i => i.object.material.color.set(0x21EC1B),
+	// 	dblclick: i => i.object.material.color.set(0xEC1BCF)
+	// })
 
-	const positions = [];
+	// const positions = [];
 
-	const levels = {}
+	// const levels = {}
 
-	// levels[myWikiMap.nodes[0].value] = 0;
+	// // levels[myWikiMap.nodes[0].value] = 0;
 
-	new ParticleField(myView, positions);
+	// new ParticleField(myView, positions);
 
-	myView.animate();
+	// myView.animate();
 
 });
